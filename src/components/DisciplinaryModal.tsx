@@ -133,7 +133,7 @@ export const DisciplinaryModal: React.FC<DisciplinaryModalProps> = ({ order, isO
               <textarea
                 required
                 rows={3}
-                placeholder="e.g., Food waited at Counter A for 35 mins. Called token over PA system 3 times. Student did not appear to collect tray."
+                placeholder="e.g., Fast delivery dispatched. Called over intercom/phone 3 times. Student did not appear to receive food order."
                 value={reasonNote}
                 onChange={(e) => setReasonNote(e.target.value)}
                 className="w-full text-xs p-3 rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-rose-500 font-medium text-stone-800"

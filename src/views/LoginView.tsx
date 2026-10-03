@@ -17,6 +17,8 @@ import {
   UserPlus,
   BookOpen,
   Building2,
+  Eye,
+  EyeOff,
 } from 'lucide-react';
 
 interface LoginViewProps {
@@ -40,12 +42,15 @@ export const LoginView: React.FC<LoginViewProps> = ({ onSuccess }) => {
   // Student Sign In State
   const [studentEmail, setStudentEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
 
   // Student Register State
   const [regName, setRegName] = useState('');
   const [regEmail, setRegEmail] = useState('');
   const [regStudentId, setRegStudentId] = useState('');
+  const [regPassword, setRegPassword] = useState('');
+  const [showRegPassword, setShowRegPassword] = useState(false);
   const [regDept, setRegDept] = useState('Computer Science & Engineering');
   const [regBatch, setRegBatch] = useState('');
   const [regPhone, setRegPhone] = useState('+880 17');
@@ -54,14 +59,17 @@ export const LoginView: React.FC<LoginViewProps> = ({ onSuccess }) => {
   // Staff Login State
   const [staffEmail, setStaffEmail] = useState('ratul.staff@campus.ac.bd');
   const [staffPin, setStaffPin] = useState('••••••');
+  const [showStaffPin, setShowStaffPin] = useState(false);
 
   // Supplier Login State
   const [selectedSupplierId, setSelectedSupplierId] = useState('cp-five-star');
   const [supplierPin, setSupplierPin] = useState('••••••');
+  const [showSupplierPin, setShowSupplierPin] = useState(false);
 
   // Admin Login State
   const [adminEmail, setAdminEmail] = useState('shahriar.admin@campus.ac.bd');
   const [adminKey, setAdminKey] = useState('••••••');
+  const [showAdminKey, setShowAdminKey] = useState(false);
 
   // 1. Student Submit
   const handleStudentSubmit = (e: React.FormEvent) => {
@@ -94,8 +102,8 @@ export const LoginView: React.FC<LoginViewProps> = ({ onSuccess }) => {
     e.preventDefault();
     setRegError(null);
 
-    if (!regName.trim() || !regEmail.trim() || !regStudentId.trim()) {
-      setRegError('Please fill in all required campus credentials.');
+    if (!regName.trim() || !regEmail.trim() || !regStudentId.trim() || !regPassword.trim()) {
+      setRegError('Please fill in all required campus credentials and password.');
       return;
     }
 
@@ -225,13 +233,21 @@ export const LoginView: React.FC<LoginViewProps> = ({ onSuccess }) => {
                       <div className="relative">
                         <Lock className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
                         <input
-                          type="password"
+                          type={showPassword ? 'text' : 'password'}
                           required
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           placeholder="••••••••"
-                          className="w-full text-xs font-medium pl-9 pr-3 py-2.5 bg-stone-50 border border-stone-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-stone-900"
+                          className="w-full text-xs font-medium pl-9 pr-10 py-2.5 bg-stone-50 border border-stone-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-stone-900"
                         />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 focus:outline-none cursor-pointer"
+                          title={showPassword ? 'Hide password' : 'Show password'}
+                        >
+                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
                       </div>
                     </div>
 
@@ -287,7 +303,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onSuccess }) => {
                       Create Student Account
                     </h2>
                     <p className="text-xs text-stone-500 mt-0.5">
-                      Register with your campus info to enjoy fast-delivery food pickup & ৳500 welcome credits.
+                      Register with your campus info to enjoy fast-delivery food in a few minutes.
                     </p>
                   </div>
 
@@ -382,11 +398,33 @@ export const LoginView: React.FC<LoginViewProps> = ({ onSuccess }) => {
                       </div>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-orange-50 border border-orange-200 text-[11px] text-orange-950 flex items-center gap-2 font-medium">
-                      <Sparkles className="w-4 h-4 text-orange-600 shrink-0" />
-                      <span>
-                        New account perks: <strong>৳500 Welcome Balance</strong> and verified Batch review rights!
-                      </span>
+                    <div>
+                      <label className="text-xs font-bold text-stone-700 block mb-1">
+                        Create Password *
+                      </label>
+                      <div className="relative">
+                        <Lock className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                        <input
+                          type={showRegPassword ? 'text' : 'password'}
+                          required
+                          placeholder="••••••••"
+                          value={regPassword}
+                          onChange={(e) => setRegPassword(e.target.value)}
+                          className="w-full text-xs font-medium pl-9 pr-10 py-2.5 bg-stone-50 border border-stone-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-stone-900"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowRegPassword(!showRegPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-stone-400 hover:text-stone-700 focus:outline-none cursor-pointer rounded-md transition"
+                          title={showRegPassword ? 'Hide password' : 'Show password'}
+                        >
+                          {showRegPassword ? (
+                            <EyeOff className="w-4 h-4 text-orange-600" />
+                          ) : (
+                            <Eye className="w-4 h-4" />
+                          )}
+                        </button>
+                      </div>
                     </div>
 
                     {regError && (
@@ -461,12 +499,20 @@ export const LoginView: React.FC<LoginViewProps> = ({ onSuccess }) => {
                   <div className="relative">
                     <Lock className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
-                      type="password"
+                      type={showStaffPin ? 'text' : 'password'}
                       required
                       value={staffPin}
                       onChange={(e) => setStaffPin(e.target.value)}
-                      className="w-full text-xs font-medium pl-9 pr-3 py-2.5 bg-stone-50 border border-stone-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-stone-900"
+                      className="w-full text-xs font-medium pl-9 pr-10 py-2.5 bg-stone-50 border border-stone-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-stone-900"
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowStaffPin(!showStaffPin)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 focus:outline-none cursor-pointer"
+                      title={showStaffPin ? 'Hide PIN' : 'Show PIN'}
+                    >
+                      {showStaffPin ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
                   </div>
                 </div>
 
@@ -526,12 +572,20 @@ export const LoginView: React.FC<LoginViewProps> = ({ onSuccess }) => {
                   <div className="relative">
                     <Lock className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
-                      type="password"
+                      type={showSupplierPin ? 'text' : 'password'}
                       required
                       value={supplierPin}
                       onChange={(e) => setSupplierPin(e.target.value)}
-                      className="w-full text-xs font-medium pl-9 pr-3 py-2.5 bg-stone-50 border border-stone-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-stone-900"
+                      className="w-full text-xs font-medium pl-9 pr-10 py-2.5 bg-stone-50 border border-stone-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-stone-900"
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowSupplierPin(!showSupplierPin)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 focus:outline-none cursor-pointer"
+                      title={showSupplierPin ? 'Hide Key' : 'Show Key'}
+                    >
+                      {showSupplierPin ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
                   </div>
                 </div>
 
@@ -590,12 +644,20 @@ export const LoginView: React.FC<LoginViewProps> = ({ onSuccess }) => {
                   <div className="relative">
                     <Lock className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
-                      type="password"
+                      type={showAdminKey ? 'text' : 'password'}
                       required
                       value={adminKey}
                       onChange={(e) => setAdminKey(e.target.value)}
-                      className="w-full text-xs font-medium pl-9 pr-3 py-2.5 bg-stone-50 border border-stone-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 text-stone-900"
+                      className="w-full text-xs font-medium pl-9 pr-10 py-2.5 bg-stone-50 border border-stone-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 text-stone-900"
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowAdminKey(!showAdminKey)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 focus:outline-none cursor-pointer"
+                      title={showAdminKey ? 'Hide Key' : 'Show Key'}
+                    >
+                      {showAdminKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
                   </div>
                 </div>
 

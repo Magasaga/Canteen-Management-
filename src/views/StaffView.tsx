@@ -13,7 +13,6 @@ import {
   Banknote,
   Search,
   MapPin,
-  Sparkles,
   ShieldAlert,
   Phone,
   User,
@@ -29,30 +28,29 @@ export const StaffView: React.FC = () => {
     penalties,
     users,
     pardonStudent,
+    foodItems,
   } = useApp();
 
   const [activeTab, setActiveTab] = useState<'queue' | 'penalties'>('queue');
-  const [counterFilter, setCounterFilter] = useState<string>('all');
   const [searchToken, setSearchToken] = useState<string>('');
   const [disciplinaryOrder, setDisciplinaryOrder] = useState<Order | null>(null);
 
-  // Filter orders
+  // Filter orders - Single Main Canteen Counter
   const activeOrders = orders.filter((o) => {
     const isPending =
       o.status === 'placed' || o.status === 'preparing' || o.status === 'ready_for_pickup';
-    const matchesCounter =
-      counterFilter === 'all' || o.pickupCounter.toLowerCase().includes(counterFilter.toLowerCase());
     const matchesSearch =
       o.tokenNumber.toLowerCase().includes(searchToken.toLowerCase()) ||
       o.studentName.toLowerCase().includes(searchToken.toLowerCase());
 
-    return isPending && matchesCounter && matchesSearch;
+    return isPending && matchesSearch;
   });
 
   const readyOrders = activeOrders.filter((o) => o.status === 'ready_for_pickup');
-  const kitchenOrders = activeOrders.filter((o) => o.status === 'placed' || o.status === 'preparing');
+  const kitchenOrders = activeOrders.filter(
+    (o) => o.status === 'placed' || o.status === 'preparing'
+  );
 
-  // Trigger ready status with sound
   const handleMarkReady = (orderId: string) => {
     playOrderReadyChime();
     updateOrderStatus(orderId, 'ready_for_pickup', currentUser?.name);
@@ -68,25 +66,25 @@ export const StaffView: React.FC = () => {
         <div>
           <div className="flex items-center gap-2">
             <span className="px-3 py-1 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase tracking-widest">
-              Canteen Hub Employee Station
+              Canteen Operations
             </span>
             <span className="text-xs text-stone-400">Duty Officer: {currentUser?.name}</span>
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight mt-2 text-white">
-            Main Canteen Serving Hub & Counter Queue
+            Main Canteen Kitchen & Fast-Delivery Queue
           </h1>
           <p className="text-xs sm:text-sm text-stone-400 mt-1 max-w-xl">
-            Direct student self-pickup management: advance cooking tokens, trigger the fast-delivery chime,
-            and log unclaimed food infractions.
+            Single counter fast-delivery hub: advance cooking tokens, trigger the rapid dispatch chime,
+            and complete orders delivered to students within minutes.
           </p>
         </div>
 
-        {/* Quick Tabs: Queue vs Disciplinary */}
-        <div className="flex items-center gap-2 bg-stone-800 p-1.5 rounded-2xl border border-stone-700">
+        {/* Quick Tabs: Kitchen Queue vs Penalties */}
+        <div className="flex flex-wrap items-center gap-2 bg-stone-800 p-1.5 rounded-2xl border border-stone-700">
           <button
             onClick={() => setActiveTab('queue')}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition ${
+            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition ${
               activeTab === 'queue'
                 ? 'bg-orange-600 text-white shadow-xs'
                 : 'text-stone-300 hover:text-white'
@@ -98,7 +96,7 @@ export const StaffView: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('penalties')}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition ${
+            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition ${
               activeTab === 'penalties'
                 ? 'bg-rose-600 text-white shadow-xs'
                 : 'text-stone-300 hover:text-white'
@@ -112,22 +110,11 @@ export const StaffView: React.FC = () => {
 
       {activeTab === 'queue' && (
         <div className="space-y-6">
-          {/* Filters & Counter Selector */}
+          {/* Single Counter Indicator & Search */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto">
-              {['all', 'Counter A', 'Counter B', 'Express'].map((station) => (
-                <button
-                  key={station}
-                  onClick={() => setCounterFilter(station)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition ${
-                    counterFilter === station
-                      ? 'bg-stone-900 text-white shadow-xs'
-                      : 'bg-white border border-stone-200 text-stone-700 hover:bg-stone-50'
-                  }`}
-                >
-                  {station === 'all' ? 'All Counter Stations' : station}
-                </button>
-              ))}
+            <div className="flex items-center gap-2 text-xs font-bold text-stone-700 bg-white border border-stone-200 px-3.5 py-2 rounded-xl shadow-2xs">
+              <MapPin className="w-4 h-4 text-orange-600" />
+              <span>Counter: Main Canteen Counter (Single Dedicated Station)</span>
             </div>
 
             <div className="relative w-full sm:w-64">
@@ -142,25 +129,25 @@ export const StaffView: React.FC = () => {
             </div>
           </div>
 
-          {/* 2-Columns: Ready at Counter vs Cooking in Kitchen */}
+          {/* 2-Columns: Fast-Delivery Dispatched vs Cooking in Kitchen */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Section 1: READY AT PICKUP COUNTER (High Attention) */}
+            {/* Section 1: READY / DISPATCHED FOR FAST DELIVERY */}
             <div className="lg:col-span-6 space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" />
                   <h2 className="text-base font-black text-stone-900 uppercase tracking-wide">
-                    Ready At Hub Counter ({readyOrders.length})
+                    Dispatched for Fast Delivery ({readyOrders.length})
                   </h2>
                 </div>
-                <span className="text-xs text-stone-500">Awaiting student collection</span>
+                <span className="text-xs text-stone-500">Delivering in a few minutes</span>
               </div>
 
               {readyOrders.length === 0 ? (
                 <div className="p-8 rounded-3xl bg-white border border-stone-200 text-center text-stone-400">
                   <CheckCircle className="w-10 h-10 mx-auto mb-2 opacity-30 text-emerald-600" />
-                  <p className="text-xs font-bold text-stone-600">No food sitting at the counter!</p>
-                  <p className="text-[11px]">All ready meals have been picked up.</p>
+                  <p className="text-xs font-bold text-stone-600">No pending deliveries!</p>
+                  <p className="text-[11px]">All ready meals have been dispatched and delivered.</p>
                 </div>
               ) : (
                 <div className="space-y-3.5">
@@ -189,10 +176,10 @@ export const StaffView: React.FC = () => {
                           <div className="text-right">
                             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-800">
                               <Bell className="w-3.5 h-3.5 text-emerald-600 animate-bounce" />
-                              Ready for Pickup
+                              Fast Delivery Out
                             </span>
                             <span className="block text-[10px] text-stone-400 mt-1">
-                              Batch: {ord.batchTime}
+                              Slot: {ord.batchTime}
                             </span>
                           </div>
                         </div>
@@ -232,22 +219,33 @@ export const StaffView: React.FC = () => {
                           </div>
                           <div className="flex items-center gap-1.5 text-emerald-700 font-bold text-[11px] pt-1 border-t border-stone-200/60">
                             <MapPin className="w-3.5 h-3.5" />
-                            <span>{ord.pickupCounter}</span>
+                            <span>Main Canteen Counter</span>
                           </div>
                         </div>
 
-                        {/* Items */}
-                        <div className="text-xs text-stone-600 font-medium space-y-0.5">
-                          {ord.items.map((item, idx) => (
-                            <div key={idx} className="flex justify-between">
-                              <span>
-                                {item.quantity}x {item.name}
-                              </span>
-                              <span className="font-semibold text-stone-800">
-                                ৳{item.price * item.quantity}
-                              </span>
-                            </div>
-                          ))}
+                        {/* Items with Staff-only Internal Batch No */}
+                        <div className="text-xs text-stone-600 font-medium space-y-1">
+                          {ord.items.map((item, idx) => {
+                            const food = foodItems.find((f) => f.id === item.foodItemId);
+                            const batchCode = food?.batchNo || item.batchNo;
+                            return (
+                              <div key={idx} className="flex justify-between items-center">
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <span className="font-bold text-stone-800">
+                                    {item.quantity}x {item.name}
+                                  </span>
+                                  {batchCode && (
+                                    <span className="text-[10px] font-mono font-bold text-orange-800 bg-orange-100/90 px-1.5 py-0.5 rounded border border-orange-200">
+                                      Batch: {batchCode}
+                                    </span>
+                                  )}
+                                </div>
+                                <span className="font-semibold text-stone-800">
+                                  ৳{item.price * item.quantity}
+                                </span>
+                              </div>
+                            );
+                          })}
                         </div>
 
                         {/* Payment & Action Buttons */}
@@ -261,29 +259,28 @@ export const StaffView: React.FC = () => {
                             ) : (
                               <span className="inline-flex items-center gap-1 text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg">
                                 <Banknote className="w-3.5 h-3.5" />
-                                <span>Pay on Hub (Collect ৳{ord.totalAmount})</span>
+                                <span>Cash on Delivery (Collect ৳{ord.totalAmount})</span>
                               </span>
                             )}
                           </div>
 
                           <div className="flex items-center gap-2">
-                            {/* Mark Collected */}
+                            {/* Mark Delivered */}
                             <button
                               onClick={() => markOrderCollected(ord.id)}
-                              className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-xs flex items-center gap-1"
+                              className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-xs flex items-center gap-1 cursor-pointer"
                             >
                               <CheckCircle className="w-3.5 h-3.5" />
-                              <span>Hand Over & Complete</span>
+                              <span>Delivered to Student</span>
                             </button>
 
-                            {/* Mark Unclaimed (Opens Strike modal) */}
+                            {/* Mark Unclaimed / Disciplinary Strike */}
                             <button
                               onClick={() => setDisciplinaryOrder(ord)}
-                              title="Student did not pick up meal. Log disciplinary note."
-                              className="px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs transition flex items-center gap-1"
+                              className="p-2 rounded-xl text-rose-600 hover:bg-rose-50 border border-rose-200 transition"
+                              title="Flag Unclaimed / Student Not Present"
                             >
-                              <UserX className="w-3.5 h-3.5" />
-                              <span>No-Show</span>
+                              <UserX className="w-4 h-4" />
                             </button>
                           </div>
                         </div>
@@ -352,7 +349,7 @@ export const StaffView: React.FC = () => {
                                 </span>
                               )}
                             </div>
-                            <span className="text-[10px] text-stone-400 block mt-0.5">{ord.pickupCounter}</span>
+                            <span className="text-[10px] text-stone-400 block mt-0.5">Main Canteen Counter</span>
                           </div>
 
                           <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 shrink-0">
@@ -360,48 +357,59 @@ export const StaffView: React.FC = () => {
                           </span>
                         </div>
 
-                      {/* Items */}
-                      <div className="p-3 rounded-xl bg-stone-50 border border-stone-100 text-xs space-y-1 font-medium text-stone-700">
-                        {ord.items.map((i, idx) => (
-                          <div key={idx} className="flex justify-between">
-                            <span className="font-bold text-stone-800">
-                              {i.quantity}x {i.name}
-                            </span>
-                            <span className="text-stone-500">৳{i.price * i.quantity}</span>
-                          </div>
-                        ))}
-                      </div>
+                        {/* Items with Staff-only Internal Batch No */}
+                        <div className="p-3 rounded-xl bg-stone-50 border border-stone-100 text-xs space-y-1.5 font-medium text-stone-700">
+                          {ord.items.map((i, idx) => {
+                            const food = foodItems.find((f) => f.id === i.foodItemId);
+                            const batchCode = food?.batchNo || i.batchNo;
+                            return (
+                              <div key={idx} className="flex justify-between items-center">
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <span className="font-bold text-stone-800">
+                                    {i.quantity}x {i.name}
+                                  </span>
+                                  {batchCode && (
+                                    <span className="text-[10px] font-mono font-bold text-orange-800 bg-orange-100/90 px-1.5 py-0.5 rounded border border-orange-200">
+                                      Batch: {batchCode}
+                                    </span>
+                                  )}
+                                </div>
+                                <span className="text-stone-500">৳{i.price * i.quantity}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
 
-                      {/* Advance Actions */}
-                      <div className="flex items-center justify-between pt-1">
-                        <span className="text-[11px] font-bold text-stone-500">
-                          {ord.batchTime}
-                        </span>
+                        {/* Advance Actions */}
+                        <div className="flex items-center justify-between pt-1">
+                          <span className="text-[11px] font-bold text-stone-500">
+                            {ord.batchTime}
+                          </span>
 
-                        <div className="flex items-center gap-2">
-                          {ord.status === 'placed' && (
+                          <div className="flex items-center gap-2">
+                            {ord.status === 'placed' && (
+                              <button
+                                onClick={() => updateOrderStatus(ord.id, 'preparing', currentUser?.name)}
+                                className="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold text-xs transition cursor-pointer"
+                              >
+                                Start Cooking
+                              </button>
+                            )}
+
+                            {/* Sound Fast Delivery Chime & Dispatch */}
                             <button
-                              onClick={() => updateOrderStatus(ord.id, 'preparing', currentUser?.name)}
-                              className="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold text-xs transition"
+                              onClick={() => handleMarkReady(ord.id)}
+                              className="px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs transition shadow-xs flex items-center gap-1.5 cursor-pointer"
                             >
-                              Start Cooking
+                              <Bell className="w-3.5 h-3.5" />
+                              <span>Dispatch Fast Delivery (Chime)</span>
                             </button>
-                          )}
-
-                          {/* Sound Fast Delivery Chime & Mark Ready */}
-                          <button
-                            onClick={() => handleMarkReady(ord.id)}
-                            className="px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs transition shadow-xs flex items-center gap-1.5"
-                          >
-                            <Bell className="w-3.5 h-3.5" />
-                            <span>Mark Ready (Sound Chime)</span>
-                          </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+                </div>
               )}
             </div>
           </div>
@@ -444,7 +452,7 @@ export const StaffView: React.FC = () => {
 
                     <button
                       onClick={() => pardonStudent(std.id)}
-                      className="mt-3 py-1.5 px-3 rounded-xl bg-white text-rose-700 hover:bg-rose-50 font-bold text-[11px] shadow-xs transition self-start"
+                      className="mt-3 py-1.5 px-3 rounded-xl bg-white text-rose-700 hover:bg-rose-50 font-bold text-[11px] shadow-xs transition self-start cursor-pointer"
                     >
                       Pardon & Clear Strikes
                     </button>

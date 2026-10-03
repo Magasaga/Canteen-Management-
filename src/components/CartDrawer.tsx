@@ -30,8 +30,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, onOrder
 
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('online');
   const [onlineProvider, setOnlineProvider] = useState<'bkash' | 'nagad' | 'student_wallet'>('bkash');
-  const [batchTime, setBatchTime] = useState<string>('12:30 PM - 1:15 PM (Lunch Rush)');
-  const [pickupCounter, setPickupCounter] = useState<string>('Main Canteen Hub (Counter A/B)');
+  const [batchTime, setBatchTime] = useState<string>('Fast Delivery (5-10 Mins)');
+  const [pickupCounter] = useState<string>('Main Canteen Counter');
   const [orderError, setOrderError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
@@ -78,8 +78,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, onOrder
     }, 450);
   };
 
-  const vat = Math.round(cartTotal * 0.05); // 5% campus tax/service fee
-  const grandTotal = cartTotal + vat;
+  const grandTotal = cartTotal; // VAT / Tax removed as requested
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
@@ -211,45 +210,33 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, onOrder
           {/* Checkout Configuration & Payment */}
           {cart.length > 0 && (
             <div className="border-t border-stone-200 p-5 bg-stone-50/70 space-y-4">
-              {/* Batch Time & Pickup Slot */}
+              {/* Fast-Delivery Timing */}
               <div className="space-y-2">
                 <label className="text-xs font-bold text-stone-700 flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5 text-orange-600" />
-                  <span>Meal Pickup Batch Time</span>
+                  <span>Fast Delivery Timing (Arrives in Few Minutes)</span>
                 </label>
                 <select
                   value={batchTime}
                   onChange={(e) => setBatchTime(e.target.value)}
-                  className="w-full text-xs font-medium bg-white border border-stone-300 rounded-lg px-3 py-2 text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full text-xs font-semibold bg-white border border-stone-300 rounded-lg px-3 py-2 text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 >
-                  <option value="11:45 AM - 12:30 PM (Morning Slot)">11:45 AM - 12:30 PM (Morning Slot)</option>
-                  <option value="12:30 PM - 1:15 PM (Lunch Rush)">12:30 PM - 1:15 PM (Lunch Rush)</option>
-                  <option value="1:15 PM - 2:00 PM (Afternoon Batch)">1:15 PM - 2:00 PM (Afternoon Batch)</option>
-                  <option value="2:30 PM - 3:30 PM (Snacks & Tea)">2:30 PM - 3:30 PM (Snacks & Tea)</option>
+                  <option value="Fast Delivery (5-10 Mins)">Fast Delivery (5-10 Mins)</option>
+                  <option value="12:30 PM - 1:00 PM (Lunch Slot)">12:30 PM - 1:00 PM (Lunch Slot)</option>
+                  <option value="1:15 PM - 1:45 PM (Afternoon Slot)">1:15 PM - 1:45 PM (Afternoon Slot)</option>
+                  <option value="2:30 PM - 3:15 PM (Snacks & Tea)">2:30 PM - 3:15 PM (Snacks & Tea)</option>
                 </select>
               </div>
 
-              {/* Pickup Counter */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-stone-700 flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Serving Station (Main Canteen Hub)</span>
-                </label>
-                <select
-                  value={pickupCounter}
-                  onChange={(e) => setPickupCounter(e.target.value)}
-                  className="w-full text-xs font-medium bg-white border border-stone-300 rounded-lg px-3 py-2 text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                >
-                  <option value="Main Canteen Hub (Counter A - Heavy Meals & Rice)">
-                    Counter A: Heavy Meals & Rice (Khans & Olympia)
-                  </option>
-                  <option value="Main Canteen Hub (Counter B - Fast Food & Fry Station)">
-                    Counter B: CP Chicken & Burgers
-                  </option>
-                  <option value="Express Cafe Counter (Brew Cafe & Aarong Chiller)">
-                    Express Counter C: Brew Cafe & Aarong Dairy
-                  </option>
-                </select>
+              {/* Single Dedicated Counter (No Other Counters) */}
+              <div className="p-2.5 rounded-xl bg-orange-50/70 border border-orange-200/80 flex items-center justify-between text-xs">
+                <div className="flex items-center gap-1.5 font-bold text-stone-800">
+                  <MapPin className="w-3.5 h-3.5 text-orange-600" />
+                  <span>Counter: Main Canteen Counter</span>
+                </div>
+                <span className="text-[10px] font-black uppercase text-orange-700 bg-white px-2 py-0.5 rounded-full border border-orange-200">
+                  Single Counter Hub
+                </span>
               </div>
 
               {/* Payment Method Selector */}
@@ -327,24 +314,16 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, onOrder
 
                 {paymentMethod === 'hub_cash' && (
                   <p className="text-[11px] text-stone-600 bg-amber-50 p-2 rounded-lg border border-amber-200">
-                    Hand cash directly to the cashier at the pickup counter when your token is called.
+                    Pay cash upon fast delivery at your table/seat or at the Main Canteen Counter.
                   </p>
                 )}
               </div>
 
               {/* Price Breakdown */}
               <div className="space-y-1 text-xs pt-2 border-t border-stone-200">
-                <div className="flex justify-between text-stone-600">
-                  <span>Subtotal</span>
-                  <span>৳{cartTotal}</span>
-                </div>
-                <div className="flex justify-between text-stone-600">
-                  <span>Campus Service Fee & VAT (5%)</span>
-                  <span>৳{vat}</span>
-                </div>
                 <div className="flex justify-between text-sm font-black text-stone-900 pt-1">
-                  <span>Grand Total</span>
-                  <span className="text-orange-600">৳{grandTotal}</span>
+                  <span>Total Payable</span>
+                  <span className="text-orange-600 font-black">৳{grandTotal}</span>
                 </div>
               </div>
 
@@ -358,13 +337,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, onOrder
               <button
                 disabled={isSubmitting || currentUser?.isSuspended}
                 onClick={handleCheckout}
-                className="w-full py-3.5 px-4 rounded-xl bg-orange-600 hover:bg-orange-700 disabled:opacity-50 text-white font-bold text-sm shadow-md transition flex items-center justify-center gap-2"
+                className="w-full py-3.5 px-4 rounded-xl bg-orange-600 hover:bg-orange-700 disabled:opacity-50 text-white font-bold text-sm shadow-md transition flex items-center justify-center gap-2 cursor-pointer"
               >
                 {isSubmitting ? (
-                  <span>Generating Token...</span>
+                  <span>Dispatching Order...</span>
                 ) : (
                   <>
-                    <span>Confirm & Generate Token</span>
+                    <span>Place Fast-Delivery Order</span>
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}

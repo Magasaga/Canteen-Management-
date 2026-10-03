@@ -40,13 +40,13 @@ export const MyOrdersView: React.FC = () => {
         return (
           <span className="px-3 py-1 rounded-full text-xs font-black bg-emerald-500 text-stone-950 uppercase tracking-wider animate-pulse flex items-center gap-1 shadow-sm">
             <Bell className="w-3.5 h-3.5" />
-            Ready for Pickup!
+            Fast Delivery Out!
           </span>
         );
       case 'collected':
         return (
           <span className="px-3 py-1 rounded-full text-xs font-bold bg-stone-100 text-stone-700 border border-stone-200">
-            Collected
+            Delivered
           </span>
         );
       case 'unclaimed':
@@ -152,11 +152,11 @@ export const MyOrdersView: React.FC = () => {
                 })}
               </div>
 
-              {/* Pickup Location & Notes */}
+              {/* Delivery Location & Notes */}
               <div className="pt-3 border-t border-stone-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
                 <div className="flex items-center gap-1.5 text-stone-600">
                   <MapPin className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span className="font-bold text-stone-800">{order.pickupCounter}</span>
+                  <span className="font-bold text-stone-800">{order.pickupCounter || 'Main Canteen Counter'}</span>
                 </div>
 
                 {order.unclaimedNote && (

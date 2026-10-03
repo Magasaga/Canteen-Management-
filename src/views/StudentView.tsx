@@ -101,8 +101,8 @@ export const StudentView: React.FC<StudentViewProps> = ({ onOpenCart }) => {
                   <span>#{ord.tokenNumber}</span>
                   <span className="text-[10px] font-semibold opacity-90">
                     {ord.status === 'ready_for_pickup'
-                      ? `Ready at ${ord.pickupCounter}`
-                      : 'In Kitchen'}
+                      ? 'Fast Delivery Dispatched'
+                      : 'Cooking in Kitchen'}
                   </span>
                 </span>
               ))}
@@ -110,7 +110,7 @@ export const StudentView: React.FC<StudentViewProps> = ({ onOpenCart }) => {
           </div>
 
           <div className="text-[11px] text-stone-400 hidden sm:block">
-            Collect at counter when ready
+            Fast delivery in a few minutes after ordering
           </div>
         </div>
       )}

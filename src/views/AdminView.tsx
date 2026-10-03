@@ -703,7 +703,7 @@ export const AdminView: React.FC<AdminViewProps> = () => {
 
                 <div className="pt-3 border-t border-stone-100 text-xs space-y-2 text-stone-500">
                   <div>
-                    <span className="font-semibold text-stone-700">Pickup Counter:</span>{' '}
+                    <span className="font-semibold text-stone-700">Canteen Counter:</span>{' '}
                     <span className="text-stone-900 font-medium">{sup.supplyHubCounter}</span>
                   </div>
                   <div>
@@ -829,7 +829,7 @@ export const AdminView: React.FC<AdminViewProps> = () => {
                   Vendor Supply Batch Logs (Direct to Main Canteen Hub)
                 </h3>
                 <p className="text-xs text-stone-500">
-                  Verified deliveries received and inspected at canteen hub stations
+                  Verified deliveries received and inspected at the Main Canteen Hub
                 </p>
               </div>
               <span className="px-3 py-1 rounded-full text-xs font-bold bg-stone-100 text-stone-700">

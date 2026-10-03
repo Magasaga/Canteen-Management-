@@ -308,7 +308,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       batch: data.batch.trim(),
       strikes: 0,
       isSuspended: false,
-      balance: 500, // Welcome campus credits
+      balance: 0,
     };
 
     setUsers((prev) => [newUser, ...prev]);
@@ -317,7 +317,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setActiveNotification({
       id: Date.now().toString(),
       title: `Welcome, ${newUser.name}!`,
-      message: `Account created successfully (${newUser.batch}). Welcome ৳500 campus credit added!`,
+      message: `Account created successfully (${newUser.batch}). You can now place fast-delivery orders!`,
       type: 'success',
     });
 
@@ -423,8 +423,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       paymentMethod,
       paymentStatus: paymentMethod === 'online' ? 'paid' : 'pay_on_hub_pending',
       status: 'placed',
-      pickupCounter: pickupCounter || 'Main Canteen Hub (Counter A)',
-      batchTime: batchTime || 'Current Slot',
+      pickupCounter: pickupCounter || 'Main Canteen Counter',
+      batchTime: batchTime || 'Fast Delivery (5-10 Mins)',
       createdAt: new Date().toISOString(),
     };
 
@@ -435,7 +435,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setActiveNotification({
       id: Date.now().toString(),
       title: `Order Placed! Token #${tokenNumber}`,
-      message: `Your food is being prepared. Wait for your token on the Hub screen!`,
+      message: `Your food is being prepared. It will be delivered in a few minutes!`,
       tokenNumber,
       type: 'success',
     });
@@ -468,7 +468,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           setActiveNotification({
             id: Date.now().toString(),
             title: `🚀 Food is Ready! Token #${ord.tokenNumber}`,
-            message: `Please collect from ${ord.pickupCounter}. Fast delivery ready!`,
+            message: `Out for fast delivery to you in a few minutes!`,
             tokenNumber: ord.tokenNumber,
             type: 'ready',
           });

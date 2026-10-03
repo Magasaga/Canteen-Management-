@@ -97,7 +97,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ foodItem, isOpen, onCl
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-stone-700 flex items-center gap-1.5">
                 <Clock className="w-4 h-4 text-orange-600" />
-                <span>Food Consumption / Batch Time *</span>
+                <span>Delivery Slot / Meal Time *</span>
               </label>
               <select
                 value={batchTime}

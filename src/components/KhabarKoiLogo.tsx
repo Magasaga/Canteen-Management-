@@ -42,7 +42,7 @@ export const KhabarKoiLogo: React.FC<KhabarKoiLogoProps> = ({
   const current = sizeMap[size];
 
   const kabarColor = isDark ? '#FFFFFF' : '#111827';
-  const koiColor = '#C2410C'; // Rich deep dark orange
+  const koiColor = isDark ? '#FB923C' : '#EA580C'; // Perfectly balanced warm orange (a bit darker than light orange, not deep rust)
   const tagColor = isDark ? '#CBD5E1' : '#64748B';
 
   return (
@@ -57,14 +57,14 @@ export const KhabarKoiLogo: React.FC<KhabarKoiLogoProps> = ({
       {showTagline && (
         <div className="flex flex-col items-center justify-center mt-1 w-full">
           <div className="flex items-center justify-center gap-1.5">
-            <span className="w-1.5 h-[1.5px] bg-[#C2410C] rounded-full" />
+            <span className="w-1.5 h-[1.5px] bg-[#EA580C] rounded-full" />
             <span
               className={`font-black tracking-widest uppercase ${current.tagSize}`}
               style={{ color: tagColor }}
             >
               Khuda Lagse
             </span>
-            <span className="w-1.5 h-[1.5px] bg-[#C2410C] rounded-full" />
+            <span className="w-1.5 h-[1.5px] bg-[#EA580C] rounded-full" />
           </div>
 
           {/* Clean smile curve accent centered */}
@@ -77,7 +77,7 @@ export const KhabarKoiLogo: React.FC<KhabarKoiLogoProps> = ({
           >
             <path
               d="M2 1 C 20 4.5, 40 4.5, 58 1"
-              stroke="#C2410C"
+              stroke="#EA580C"
               strokeWidth="1.8"
               strokeLinecap="round"
             />
