@@ -1,0 +1,6 @@
+{
+  "name": "KhabarKoi",
+  "description": "KhabarKoi - Khuda Lagse. Smart university canteen fast-delivery, token hub, supplier RBAC management, and no-waiter pickup system.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
