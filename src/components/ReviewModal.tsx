@@ -13,7 +13,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ foodItem, isOpen, onCl
   const { addReview, currentUser } = useApp();
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
-  const [batchTime, setBatchTime] = useState('1:15 PM Lunch Rush Batch');
+  const batchTime = 'Standard Order';
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isOpen || !foodItem) return null;
@@ -91,26 +91,6 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ foodItem, isOpen, onCl
                   {foodItem.batchNo || 'BATCH-20261002-KK01'}
                 </span>
               </div>
-            </div>
-
-            {/* Batch Time Picker */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-stone-700 flex items-center gap-1.5">
-                <Clock className="w-4 h-4 text-orange-600" />
-                <span>Delivery Slot / Meal Time *</span>
-              </label>
-              <select
-                value={batchTime}
-                onChange={(e) => setBatchTime(e.target.value)}
-                className="w-full text-xs font-medium bg-white border border-stone-300 rounded-xl px-3 py-2.5 text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-500"
-              >
-                <option value="11:45 AM Morning Break Slot">11:45 AM Morning Break Slot</option>
-                <option value="12:30 PM Lunch Batch 1">12:30 PM Lunch Batch 1</option>
-                <option value="1:15 PM Lunch Rush Batch">1:15 PM Lunch Rush Batch</option>
-                <option value="2:00 PM Afternoon Batch">2:00 PM Afternoon Batch</option>
-                <option value="3:30 PM Tea & Snacks Slot">3:30 PM Tea & Snacks Slot</option>
-                <option value="5:00 PM Evening Slot">5:00 PM Evening Slot</option>
-              </select>
             </div>
 
             {/* Star Rating */}

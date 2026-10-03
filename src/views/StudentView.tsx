@@ -392,16 +392,16 @@ export const StudentView: React.FC<StudentViewProps> = ({ onOpenCart }) => {
         )}
       </div>
 
-      {/* Student Reviews Feed with Batch Times */}
+      {/* Student Reviews Feed */}
       <div className="pt-6 border-t border-stone-200">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
           <div>
             <h2 className="text-base font-black text-stone-900 flex items-center gap-2">
               <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-              <span>Student Batch Review Log</span>
+              <span>Student Food Review Log</span>
             </h2>
             <p className="text-xs text-stone-500">
-              Every review records serving batch time and student academic batch.
+              Verified food quality reviews and supplier batch traceability.
             </p>
           </div>
         </div>
@@ -443,10 +443,9 @@ export const StudentView: React.FC<StudentViewProps> = ({ onOpenCart }) => {
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-stone-500 pt-0.5">
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-2.5 h-2.5 text-stone-400" />
-                    <span>{rev.batchTime}</span>
-                  </div>
+                  <span className="text-[10px] text-stone-400">
+                    {new Date(rev.createdAt).toLocaleDateString()}
+                  </span>
                   {rev.batchNo && (
                     <span className="font-mono font-bold text-orange-800 bg-orange-100/90 px-1.5 py-0.5 rounded text-[9px] border border-orange-200">
                       Batch: {rev.batchNo}

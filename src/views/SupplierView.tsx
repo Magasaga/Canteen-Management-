@@ -459,7 +459,7 @@ export const SupplierView: React.FC = () => {
                       By {rev.studentName} ({rev.studentBatch})
                     </span>
                     <span>•</span>
-                    <span>{rev.batchTime}</span>
+                    <span>{new Date(rev.createdAt).toLocaleDateString()}</span>
                   </div>
                 </div>
 

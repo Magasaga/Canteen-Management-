@@ -178,9 +178,6 @@ export const StaffView: React.FC = () => {
                               <Bell className="w-3.5 h-3.5 text-emerald-600 animate-bounce" />
                               Fast Delivery Out
                             </span>
-                            <span className="block text-[10px] text-stone-400 mt-1">
-                              Slot: {ord.batchTime}
-                            </span>
                           </div>
                         </div>
 
@@ -383,7 +380,7 @@ export const StaffView: React.FC = () => {
                         {/* Advance Actions */}
                         <div className="flex items-center justify-between pt-1">
                           <span className="text-[11px] font-bold text-stone-500">
-                            {ord.batchTime}
+                            {new Date(ord.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </span>
 
                           <div className="flex items-center gap-2">

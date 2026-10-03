@@ -113,7 +113,7 @@ export const MyOrdersView: React.FC = () => {
                       {getStatusBadge(order.status)}
                     </div>
                     <span className="text-xs text-stone-400 mt-0.5 block">
-                      Ordered {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} · {order.batchTime}
+                      Ordered {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>
                 </div>

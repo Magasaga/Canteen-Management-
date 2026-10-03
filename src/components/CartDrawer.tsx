@@ -30,7 +30,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, onOrder
 
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('online');
   const [onlineProvider, setOnlineProvider] = useState<'bkash' | 'nagad' | 'student_wallet'>('bkash');
-  const [batchTime, setBatchTime] = useState<string>('Fast Delivery (5-10 Mins)');
   const [pickupCounter] = useState<string>('Main Canteen Counter');
   const [orderError, setOrderError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -54,7 +53,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, onOrder
     setTimeout(() => {
       const res = placeOrder({
         paymentMethod,
-        batchTime,
+        batchTime: 'Fast Delivery',
         pickupCounter,
       });
 
@@ -210,24 +209,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, onOrder
           {/* Checkout Configuration & Payment */}
           {cart.length > 0 && (
             <div className="border-t border-stone-200 p-5 bg-stone-50/70 space-y-4">
-              {/* Fast-Delivery Timing */}
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-stone-700 flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-orange-600" />
-                  <span>Fast Delivery Timing (Arrives in Few Minutes)</span>
-                </label>
-                <select
-                  value={batchTime}
-                  onChange={(e) => setBatchTime(e.target.value)}
-                  className="w-full text-xs font-semibold bg-white border border-stone-300 rounded-lg px-3 py-2 text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                >
-                  <option value="Fast Delivery (5-10 Mins)">Fast Delivery (5-10 Mins)</option>
-                  <option value="12:30 PM - 1:00 PM (Lunch Slot)">12:30 PM - 1:00 PM (Lunch Slot)</option>
-                  <option value="1:15 PM - 1:45 PM (Afternoon Slot)">1:15 PM - 1:45 PM (Afternoon Slot)</option>
-                  <option value="2:30 PM - 3:15 PM (Snacks & Tea)">2:30 PM - 3:15 PM (Snacks & Tea)</option>
-                </select>
-              </div>
-
               {/* Single Dedicated Counter (No Other Counters) */}
               <div className="p-2.5 rounded-xl bg-orange-50/70 border border-orange-200/80 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-1.5 font-bold text-stone-800">
